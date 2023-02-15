@@ -1,0 +1,27 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# fe-reactjs
+# dependencies
+/fe-reactjs/node_modules
+/fe-reactjs/.pnp
+/fe-reactjs/.pnp.js
+
+# testing
+/fe-reactjs/coverage
+
+# production
+/fe-reactjs/build
+
+# misc
+/fe-reactjs/.DS_Store
+/fe-reactjs/.env.local
+/fe-reactjs/.env.development.local
+/fe-reactjs/.env.test.local
+/fe-reactjs/.env.production.local
+    
+/fe-reactjs/npm-debug.log*
+/fe-reactjs/yarn-debug.log*
+/fe-reactjs/yarn-error.log*
+
+# be-nodejs
+/be-nodejs/node_modules

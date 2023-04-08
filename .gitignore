@@ -25,3 +25,4 @@
 
 # be-nodejs
 /be-nodejs/node_modules
+/be-nodejs/.env

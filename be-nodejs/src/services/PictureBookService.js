@@ -1,10 +1,9 @@
 const PictureBook = require("./../models/PictureBook");
-const Genre = require("./../models/Genre");
 const { cleanProperties } = require('./../validator/RequestValidate');
 
 async function findAll(){
     try {
-        return await PictureBook.find({}).populate("genre", "name");
+        return await PictureBook.findAll().populate("genre", "name");
     }
     catch (err) {
         throw err;
@@ -23,7 +22,7 @@ async function findAllPublished(){
 async function create(data){
     allowedProperties = {
         name: true,
-        authorId: true,
+        author: true,
         releaseAt: true,
         avatar: true,
         content: true,

@@ -33,7 +33,6 @@ const GenreSchema = new Schema({
     },
     published: {
         type: Boolean,
-        required: true,
         default: true
     }
 },
@@ -42,11 +41,6 @@ const GenreSchema = new Schema({
         collection: 'Genres'
     }
 );
-
-GenreSchema.path('name').validate(async (value) => {
-    const nameCount = await mongoose.models.Genre.countDocuments({ name: value });
-    return !nameCount;
-}, 'Name has already been taken.');
 
 const Genre = mongoose.model("Genre", GenreSchema);
 

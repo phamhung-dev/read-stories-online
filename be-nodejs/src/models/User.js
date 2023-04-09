@@ -67,8 +67,6 @@ const UserSchema = new Schema({
 UserSchema.set('toJSON', {
     transform: function(doc, ret, opt) {
         delete ret['password'];
-        delete ret['isAdmin'];
-        delete ret['isLocked'];
         return ret
     }
 });

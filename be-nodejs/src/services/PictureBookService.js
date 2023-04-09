@@ -2,9 +2,6 @@ const PictureBook = require("./../models/PictureBook");
 const { cleanProperties } = require('./../validator/RequestValidate');
 const { cloudinary } = require("./../../config/CloudinaryConfig");
 
-const Genre = require("./../models/Genre");
-const Author = require("./../models/Author");
-
 const populateQuery = [{path: "genre", select: "name"}, {path: "author", select: "name"}];
 const getPublicId = (imageURL) => imageURL.split("/").pop().split(".")[0];
 

@@ -5,11 +5,13 @@ const authorApi = require("./AuthorApi");
 const chapterApi = require("./ChapterApi");
 const userApi = require("./UserApi");
 const purchaseApi = require("./PurchaseApi");
+const favoriteApi = require("./FavoriteApi");
 
 adminApi.use("/picture-books", pictureBookApi);
 adminApi.use("/chapters", chapterApi);
 adminApi.use("/users", userApi);
 adminApi.use("/purchases", purchaseApi);
 adminApi.use("/authors", authorApi);
+adminApi.use("/favorites", favoriteApi)
 
 module.exports = adminApi;

@@ -40,4 +40,14 @@ async function create(req, res) {
     }
 }
 
-module.exports = { findAll, create, findById, findByPictureBookId };
+async function update(req, res) {
+    try {
+        const chapter = await chapterService.update(req.params.id, req.body);
+        res.status(200).json({message: 'SUCCESS', data: chapter});
+    }
+    catch (err) {
+        res.status(400).json({message: 'ERROR', data: {content: err.message}});
+    }
+}
+
+module.exports = { findAll, create, findById, findByPictureBookId, update };

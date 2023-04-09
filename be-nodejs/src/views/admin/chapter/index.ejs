@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/header') %>
+  <header>
+    <!-- Sidebar -->
+    <%- include('../partials/sidebar') %>
+    <!-- Sidebar -->
+    <!-- Navbar -->
+    <%- include('../partials/navbar') %>
+    <!-- Navbar -->
+  </header>
+  <body>
+    <main style="margin-top: 58px">
+      <div class="container pt-4">
+        <section class="mb-4">
+          <div class="d-flex justify-content-end">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-mdb-toggle="modal"
+              data-mdb-target="#addModal"
+            >
+              Add
+            </button>
+          </div>
+
+          <div class="card mt-3">
+            <div class="card-header py-3">
+              <h5 class="mb-0 text-center"><strong>Chapter</strong></h5>
+            </div>
+
+            <div class="card-body p-0">
+              <table class="table align-middle mb-0 bg-white table-bordered">
+                <thead class="bg-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

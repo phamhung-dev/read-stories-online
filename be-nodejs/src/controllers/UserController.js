@@ -109,4 +109,4 @@ function index(req, res) {
     res.render('web/index');
 }
 
-module.exports = { login, register, logout, forgotPassword, show, update, findAll, showProfile, updateProfile, showLoginForm };
+module.exports = { login, register, logout, forgotPassword, show, update, findAll, showProfile, updateProfile };

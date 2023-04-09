@@ -12,6 +12,10 @@ async function findAll() {
 
 async function findById(id) {
     try {
+        const genre = await Genre.findById(id);
+        if (!genre) {
+            throw new Error("Genre not found");
+        }
         return await Genre.findById(id);
     }
     catch (err) {

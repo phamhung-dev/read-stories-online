@@ -34,7 +34,7 @@ const PurchaseSchema = new Schema({
 },
     {
         timestamps: true,
-        collection: 'Histories'
+        collection: 'Purchases'
     }
 );
 

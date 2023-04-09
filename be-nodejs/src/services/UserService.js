@@ -20,7 +20,7 @@ async function login(data) {
     }
     if (user && (await bcrypt.compare(dataClean.password, user.password))) {
         const token = jwt.sign(
-            { userId: user.id, email: user.email },
+            { id: user._id, email: user.email },
             process.env.TOKEN_KEY,
             {
                 expiresIn: "30d",
@@ -62,7 +62,7 @@ async function register(data) {
         password: await bcrypt.hash(dataClean.password, 10),
     });
     const token = jwt.sign(
-        { userId: newUser.id, email: newUser.email },
+        { id: newUser._id, email: newUser.email },
         process.env.TOKEN_KEY,
         {
             expiresIn: "30d",

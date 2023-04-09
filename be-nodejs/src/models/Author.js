@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-var slug = require('mongoose-slug-generator');
+var slug = require('mongoose-slug-updater');
 var toJson = require('@meanie/mongoose-to-json');
 
 mongoose.plugin(slug);

@@ -9,4 +9,14 @@ const cleanProperties = (data, allowedProperties) => {
     return cleanJson;
 }
 
-module.exports = { cleanProperties };
+const emailValidator = (email) => { 
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+
+const passwordValidator = (password) => {
+    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    return re.test(password);
+}
+
+module.exports = { cleanProperties, emailValidator, passwordValidator };

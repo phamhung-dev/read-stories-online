@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const api = require("./routes/Api");
+const view = require("./routes/View");
 const db = require("./config/DbConfig");
 
 const app = express();
@@ -26,6 +27,11 @@ db.on("connected", (err, res) => {
 });
 
 app.use("/api", api);
+app.use("/", view);
+
+app.set('views', __dirname + '/src/views');
+app.set('view engine', 'ejs');
+app.use('/public', express.static(__dirname + '/public'));
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3000;

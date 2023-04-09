@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-var slug = require('mongoose-slug-generator');
+var slug = require('mongoose-slug-updater');
 var toJson = require('@meanie/mongoose-to-json');
 
 mongoose.plugin(slug);
@@ -16,15 +16,11 @@ const ChapterSchema = new Schema({
         type: String,
         trim: true,
         maxlength: 512,
-        required: true,
-        unique: true,
-        dropDups: true
+        required: true
     },
     slug: {
         type: String,
-        slug: "name",
-        unique: true,
-        dropDups: true
+        slug: "name"
     },
     orderNumber: {
         type: Number,
@@ -43,7 +39,7 @@ const ChapterSchema = new Schema({
     }
 );
 
-ChapterSchema.index({ pictureBook: 1, orderNumber: 1 }, { unique: true });
+//ChapterSchema.index({ pictureBook: 1, orderNumber: 1 }, { unique: true });
 
 const Chapter = mongoose.model("Chapter", ChapterSchema);
 

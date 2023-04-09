@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-var slug = require('mongoose-slug-generator');
+var slug = require('mongoose-slug-updater');
 var toJson = require('@meanie/mongoose-to-json');
 
 mongoose.plugin(slug);
@@ -85,11 +85,6 @@ const PictureBookSchema = new Schema({
         type: ObjectId,
         ref: "Genre",
         required: true
-    },
-    favorite: {
-        type: ObjectId,
-        ref: "Favorite",
-        required: true
     }
 },
     {
@@ -97,10 +92,7 @@ const PictureBookSchema = new Schema({
         collection: 'PictureBooks'
     }
 );
-PictureBookSchema.path('name').validate(async (value) => {
-    const nameCount = await mongoose.models.PictureBook.countDocuments({ name: value });
-    return !nameCount;
-}, 'Name has already been taken.');
+
 const PictureBook = mongoose.model("PictureBook", PictureBookSchema);
 
 module.exports = PictureBook;

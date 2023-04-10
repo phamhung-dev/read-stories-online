@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/header') %>
+<header>
+  <!-- Sidebar -->
+  <%- include('../partials/sidebar') %>
+  <!-- Sidebar -->
+  <!-- Navbar -->
+  <%- include('../partials/navbar') %>
+  <!-- Navbar -->
+ 
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+</header>
+
+<body>
+  <main style="margin-top: 58px">
+    <div class="container pt-4">
+      <section class="mb-4">
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#addModal">
+            Add
+          </button>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header py-3">
+            <h5 class="mb-0 text-center"><strong>Role</strong></h5>
+          </div>
+
+          <div class="card-body p-0">
+            <table class="table align-middle mb-0 bg-white table-bordered" id="tbRole">
+              
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+
+
+
+<!-- Modal add -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal('addModal')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="dataPage">      
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="text" id="nameRole" class="form-control" />
+            <label class="form-label" for="form3Example3">Name role</label>
+          </div>
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="text" id="description" class="form-control" />
+            <label class="form-label" for="form3Example3">Description</label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal('addModal')">Close</button>
+        <button type="button" class="btn btn-primary" id="savePage">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal edit -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal('editModal')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="dataPage">   
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="text" id="e_roleName" class="form-control" />
+            <label class="form-label" for="form3Example3">Role name</label>
+          </div>
+          <div class="form-outline mb-4">
+            <input type="text" id="e_description" class="form-control" />
+            <label class="form-label" for="form3Example3">Description</label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal('addModal')">Close</button>
+        <button type="button" class="btn btn-primary" id="editPage">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal delete -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal('deleteModal')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3>Are you sure to delete this role?</h3>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal('deleteModal')">Close</button>
+        <button type="button" class="btn btn-error" id="deletePage">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+  </main>
+  <%- include('../partials/footer') %>
+  <script src="https://www.tutorialspoint.com/jquery/jquery-3.6.0.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript">
+
+    //close modal onclick
+    function closeModal(id) {
+      $(`#${id}`).modal('hide');
+    }
+    fetch('http://localhost:3000/api/admin/roles',{
+      method : "GET"
+      })
+        .then(response => response.json())
+        .then(res => {
+          // Create DataTable
+          $(document).ready(function() {
+            $('#tbRole').DataTable({
+              data:res.data,
+              columns: [
+                { title: "Name", data: "name" },
+                { title: "Description", data: "description" },
+                { title: "Created At", data: "createdAt",
+                  render: function (data, type, row) {
+                    var date = new Date(data);
+                    return '<span>' + date.getDate() + '/' + date.getMonth() + "/" + date.getFullYear() + '</span>';
+                  }
+                },
+                { title: "Updated At", data: "updatedAt",
+                  render: function (data, type, row) {
+                      var date = new Date(data);
+                      return '<span>' + date.getDate() + '/' + date.getMonth() + "/" + date.getFullYear() + '</span>';
+                    }
+                 },
+                { title: "Action", data: "id",
+                  render: function (data, type, row) {
+                    return `<button type="button" class="btn btn-primary" onclick="getData('${data}')" data-mdb-toggle="modal" data-mdb-target="#editModal">Edit</button> <button type="button" class="btn btn-danger" data-mdb-toggle="modal" onclick="deletePage('${data}')" data-mdb-target="#deleteModal">Delete</button>`;
+                  } 
+                }
+              ]
+            });
+          });
+        });
+
+    //add data
+    document.getElementById('savePage').addEventListener('click', function(){
+      fetch('http://localhost:3000/api/admin/roles/create',{
+      method : "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body:  JSON.stringify({
+        name: document.getElementById('nameRole').value,
+        description: document.getElementById('description').value
+      }),
+      })
+      .then(response => response.json())
+      .then(res => {
+        if(res.data.message == "ERROR"){
+          alert(res.data.content);
+        }
+        else{
+          alert("Add success");
+          window.location.reload();
+        }
+      });
+    });
+
+    var idPage;
+    function getData(id){
+      idPage = id;
+      fetch(`http://localhost:3000/api/admin/roles/${id}`,{
+      method : "GET",
+      })
+      .then(response => response.json())
+      .then(res => {
+        if(res.message == "ERROR"){
+          alert(res.data.content);
+        }
+        else{
+          document.getElementById('e_roleName').value = res.data[0].name;
+          document.getElementById('e_description').value = res.data[0].description;
+        }
+      });
+    }
+
+    //edit data
+    document.getElementById('editPage').addEventListener('click', function(){
+      data = {
+        name: document.getElementById('e_roleName').value,
+        description: document.getElementById('e_description').value
+      }
+
+      fetch(`http://localhost:3000/api/admin/roles/${idPage}/update`,{
+      method : "PUT",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(res => {
+        if(res.message == "ERROR"){
+          alert(res.data.content);
+        }
+        else{
+          alert("Edit success");
+          window.location.reload();
+        }
+      });
+    });
+    
+    var idPageDelete;
+    //delete data
+    function deletePage(id){
+      //check deletePage have click
+      idPageDelete = id;
+    }
+
+    document.getElementById('deletePage').addEventListener('click', function(){
+      fetch(`http://localhost:3000/api/admin/roles/${idPageDelete}/destroy`,{
+      method : "DELETE",
+      })
+      .then(response => response.json())
+      .then(res => {
+        console.log(res);
+        if(res.message == "ERROR"){
+          alert(res.data.content);
+        }
+        else{
+          alert("Delete success");
+          window.location.reload();
+        }
+      });
+    });
+  
+  </script>
+</body>
+
+</html>

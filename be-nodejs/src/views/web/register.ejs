@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yae Manga House - Anime Manga or Comic and Game Blog Website Template</title>
+    <link rel="icon" href="/public/img/logo/favicon.ico">
+
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/slicknav.css">
+    <link rel="stylesheet" href="/public/css/acmeticker.css">
+    <link rel="stylesheet" href="/public/css/star-rating.min.css">
+    <link rel="stylesheet" href="/public/css/magnific-popup.css">
+    <link rel="stylesheet" href="/public/css/slick.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+
+<body>
+
+    <div class="wrap">
+        <canvas id="sakura"></canvas>
+    </div>
+
+    <%- include('partials/preloader') %>
+    
+    <%- include('partials/header') %>
+
+    <div class="container mb-5">
+        <div class="row px" style="background: url(/public/img/manga_banner/log.jpg) fixed no-repeat center/cover; padding: 0 300px;">
+            <div class="col-12 my-3">
+                <h2 class="text-white text-center">Register</h2>
+            </div>
+            <div class="col-12 mb-3">
+                <label for="name_register" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name_register" style="color: black;" required>
+            </div>
+            <div class="col-12 mb-3">
+                <label for="email_register" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email_register" style="color: black;" required>
+            </div>
+            <div class="col-12 mb-3">
+                <label for="password_register" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password_register" style="color: black;" required>
+            </div>
+            <div class="col-12 mb-3">
+                <label for="retype_password_register" class="form-label">Retype password</label>
+                <input type="password" class="form-control" id="retype_password_register" style="color: black;" required>
+            </div>
+            <div class="col-12 mb-3">
+                <button id="btn_register" class="modal_btn text-center">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <%- include('partials/login') %>
+
+    <script src="/public/js/jquery-3.6.0.min.js"></script>
+
+    <script src="/public/js/bootstrap.min.js"></script>
+    <script src="/public/js/popper.min.js"></script>
+
+    <script src="/public/js/jquery.slicknav.min.js"></script>
+
+    <script src="/public/js/slick.min.js"></script>
+
+    <script src="/public/js/form_validation.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#form").xvalidation({
+                theme: "materialize"
+            });
+            $("#form").submit(function(evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+                if ($("#form").data().xvalidation.methods.validate()) {
+                    swal("Thanks!", "We Will Contact You Soon", "success");
+                }
+                return false;
+            });
+        });
+    </script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js">
+    </script>
+
+    <script src="/public/js/star-rating.min.js"></script>
+
+    <script src="/public/js/fontawsome.js"></script>
+
+    <script src="/public/js/jquery.magnific-popup.js"></script>
+
+    <script src="/public/js/acmeticker.min.js"></script>
+
+    <script src="/public/js/jquery.scrollUp.min.js"></script>
+
+    <script src="/public/js/main.js"></script>
+    <script src="/public/js/rocket-loader.min.js"
+        data-cf-settings="6899e26392dbd83045de8357-|49" defer=""></script>
+    <script>
+        (function() {
+            var js =
+                "window['__CF$cv$params']={r:'7b51b7b9a923493b',m:'H5zf8GoKi9.vXlvNxoVyc2b1BBSQAb8aLQs.lEQZias-1681032483-0-AfOs5vGh4K+EhDCvClXQN+rgW53vNAqVrPTB5tIv/+3un13wLn2TBKeMwba7EutMaaAk3exjUCFQWPfKIdYIhLpTVkMB9FXBkVByComfzsvWY9JP6gzevixF0OQJlx1N2g==',s:[0xe03e24a587,0x210fe112c8],u:'/cdn-cgi/challenge-platform/h/b'};var now=Date.now()/1000,offset=14400,ts=''+(Math.floor(now)-Math.floor(now%offset)),_cpo=document.createElement('script');_cpo.nonce='',_cpo.src='/cdn-cgi/challenge-platform/h/b/scripts/alpha/invisible.js?ts='+ts,document.getElementsByTagName('head')[0].appendChild(_cpo);";
+            var _0xh = document.createElement('iframe');
+            _0xh.height = 1;
+            _0xh.width = 1;
+            _0xh.style.position = 'absolute';
+            _0xh.style.top = 0;
+            _0xh.style.left = 0;
+            _0xh.style.border = 'none';
+            _0xh.style.visibility = 'hidden';
+            document.body.appendChild(_0xh);
+
+            function handler() {
+                var _0xi = _0xh.contentDocument || _0xh.contentWindow.document;
+                if (_0xi) {
+                    var _0xj = _0xi.createElement('script');
+                    _0xj.nonce = '';
+                    _0xj.innerHTML = js;
+                    _0xi.getElementsByTagName('head')[0].appendChild(_0xj);
+                }
+            }
+            if (document.readyState !== 'loading') {
+                handler();
+            } else if (window.addEventListener) {
+                document.addEventListener('DOMContentLoaded', handler);
+            } else {
+                var prev = document.onreadystatechange || function() {};
+                document.onreadystatechange = function(e) {
+                    prev(e);
+                    if (document.readyState !== 'loading') {
+                        document.onreadystatechange = prev;
+                        handler();
+                    }
+                };
+            }
+        })();
+
+        $(document).ready(function(){
+            $('#btn_register').on('click', function(){
+                var name = $('#name_register').val();
+                var email = $('#email_register').val();
+                var password = $('#password_register').val();
+                var retype_password = $('#retype_password_register').val();
+                if(name == '' || email == '' || password == '' || retype_password == ''){
+                    swal("Error!", "Please fill all the fields", "error");
+                }
+                else{
+                    if(password == retype_password){
+                        $.ajax({
+                            url: '/api/authenticate/register',
+                            type: 'POST',
+                            data: {
+                                name: name,
+                                email: email,
+                                password: password,
+                                retypePassword: retype_password
+                            },
+                            success: function(response){
+                                $('#name_register').val('');
+                                $('#email_register').val('');
+                                $('#password_register').val('');
+                                $('#retype_password_register').val('');
+                                swal("Success!", "You have successfully registered", "success");
+                                setTimeout(function(){
+                                    $('.js-show-modal1').click();
+                                }, 2000);
+                            },
+                            error: function(response){
+                                swal("Error!", response.responseJSON.data.content, "error");
+                            }
+                        });
+                    }
+                    else{
+                        swal("Error!", "Password and retype password does not match", "error");
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

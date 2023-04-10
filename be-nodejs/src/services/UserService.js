@@ -199,6 +199,9 @@ async function updateProfile(id, data){
     }
     var imageURL = user.avatar;
     try {
+        if((dataClean.password && !dataClean.retypePassword) || (!dataClean.password && dataClean.retypePassword)){
+            throw new Error("Password and retype password are required");
+        }
         if(dataClean.password){
             if (!passwordValidator(dataClean.password)) {
                 throw new Error("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter and one number");

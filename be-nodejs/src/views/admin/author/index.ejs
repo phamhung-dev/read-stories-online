@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/header') %>
+  <header>
+    <!-- Sidebar -->
+    <%- include('../partials/sidebar') %>
+      <!-- Sidebar -->
+      <!-- Navbar -->
+      <%- include('../partials/navbar') %>
+        <!-- Navbar -->
+  </header>
+
+  <body>
+    <main style="margin-top: 58px">
+      <div class="container pt-4">
+        <section class="mb-4">
+          <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#addModal">
+              Add
+            </button>
+          </div>
+
+          <div class="card mt-3">
+            <div class="card-header py-3">
+              <h5 class="mb-0 text-center"><strong>Chapter</strong></h5>
+            </div>
+
+            <div class="card-body p-0">
+              <table class="table align-middle mb-0 bg-white table-bordered">
+                <thead class="bg-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <%- include('../partials/footer') %>
+  </body>
+  <script>
+    $(document).ready(function () {
+      fetch("/api/admin/chapters")
+        .then((response) => response.json())
+        .then((response) => {
+          $("#chapterTable").DataTable({
+            data: response.data,
+            columns: [
+              { data: "id" },
+              { data: "pictureBook.name" },
+              { data: "name" },
+              { data: "orderNumber" },
+            ],
+            columnDefs: [
+              {
+                targets: 4,
+                data: null,
+                render: function (data, type, row) {
+                  return `
+                <button type="button" class="btn btn-primary btn-sm" onclick="getChapterById('${data.id}')" ">Edit</button>
+              `;
+                },
+              },
+            ],
+          });
+        });
+      load();
+    });
+    function getChapterById(id) {
+      fetch(`/api/admin/chapters/${id}/show`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.status !== "success") {
+            $("#editId").val(response.data.id);
+            $("#editName").val(response.data.name);
+            $("#editOrderNumber").val(response.data.orderNumber);
+            $("#editPictureBookSelect")
+              .val(response.data.pictureBook.id)
+              .change();
+            $("#editModal").modal("show");
+          }
+        });
+    }
+    function saveChanges() {
+      const id = $("#editId").val();
+      const name = $("#editName").val();
+      const orderNumber = $("#editOrderNumber").val();
+      const pictureBook = $("#editPictureBookSelect").val();
+      const data = {
+        name,
+        orderNumber,
+        pictureBook,
+      };
+      fetch(`/api/admin/chapters/${id}/update`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          if (response.message === "SUCCESS") {
+            window.location.reload();
+          } else {
+            alert(response.content);
+          }
+        });
+    }
+    function createChapter() {
+      const name = $("#addName").val();
+      const orderNumber = $("#addOrderNumber").val();
+      const pictureBook = $("#pictureBookSelect").val();
+      const data = {
+        name,
+        orderNumber,
+        pictureBook,
+      };
+      fetch(`/api/admin/chapters/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          if (response.message === "SUCCESS") {
+            window.location.reload();
+          } else {
+            alert(response.content);
+          }
+        });
+    }
+    function load() {
+      fetch("/api/admin/picture-books")
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          const pictureBooks = response.data.map((pictureBook) => {
+            return `<option value="${pictureBook.id}">${pictureBook.name}</option>`;
+          });
+          document.getElementById("pictureBookSelect").innerHTML = pictureBooks;
+          document.getElementById("editPictureBookSelect").innerHTML =
+            pictureBooks;
+        });
+    }
+  </script>
+
+</html>

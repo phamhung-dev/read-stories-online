@@ -384,3 +384,109 @@
 
 
 })(jQuery);
+
+$('#btn_login').click(function(){
+  var email = $('#email').val();
+  var password = $('#password').val();
+  var remember = $('#remember').val();
+  $.ajax({
+      url: '/api/authenticate/login',
+      type: 'POST',
+      data: {
+          email: email,
+          password: password
+      },
+      success: function(response) {
+          if(remember == 'on'){
+              localStorage.setItem('email', email);
+              localStorage.setItem('password', password);
+          }
+          else{
+              localStorage.removeItem('email');
+              localStorage.removeItem('password');
+          }
+          document.cookie = `token=${response.data.token}`;
+          swal("Success!", "Login successfully", "success");
+          setTimeout(function(){
+              window.location.href = '/';
+          }, 2000);
+      },
+      error: function(response) {
+          swal("Error!", response.responseJSON.data.content, "error");
+      }
+  });
+});
+
+$(document).ready(async function(){
+  var email = localStorage.getItem('email');
+  var password = localStorage.getItem('password');
+  if(email && password){
+      $('#email').val(email);
+      $('#password').val(password);
+      $('#remember').attr('checked', true);
+  }
+  if(readCookie('token')){
+      await fetch('/api/user/profile', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': readCookie('token')
+          }
+      }).then(response => {
+          if(response.ok){
+            return response.json();
+          }
+          else{
+            throw new Error('User not logged in');
+          }
+      }).then(response => {
+        $('#nav_login').remove();
+        $('#nav_profile').append(`<a class="nav-link" href="/user/profile">${response.data.name}</a>`);          
+      }).catch(error => {
+        $('#nav_logout').remove();
+        console.log(error);
+      });
+  }
+  else{
+      $('#nav_logout').remove();
+      $('#nav_profile').remove();
+  }
+});
+$('#btn_logout').click(async function(){
+  await fetch('/api/authenticate/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': readCookie('token')
+        }
+    }).then(response => {
+      if(response.ok){
+        return response.json();
+      }
+      else{
+        throw new Error(response.statusText);
+      }
+    })
+    .then(response => {
+      eraseCookie('token');
+      swal("Success!", response.data.content, "success");
+      setTimeout(function(){
+          window.location.href = '/';
+      }, 2000);
+    }).catch(error => {
+      swal("Error!", error.toString(), "error");
+    });
+});
+function readCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+}
+function eraseCookie(name) {
+  document.cookie = `${name}=null`;
+}

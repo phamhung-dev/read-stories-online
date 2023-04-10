@@ -40,4 +40,14 @@ async function update(req, res){
     }
 }
 
-module.exports = { findAll, findById, create, update };
+async function findAllPublished(req, res) {
+    try {
+        const genres = await genreService.findAllPublished();
+        res.status(200).json({message: 'SUCCESS', data: genres});
+    }
+    catch (err) {
+        res.status(400).json({message: 'ERROR', data: {content: err.message}});
+    }
+}
+
+module.exports = { findAll, findById, create, update, findAllPublished };

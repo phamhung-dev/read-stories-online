@@ -78,7 +78,7 @@ async function show(req, res) {
 
 async function destroy(req, res){
     try{
-        const page = await pageService.remove(req.params.id);
+        const page = await pageService.destroy(req.params.id);
         res.status(200).json({message: 'SUCCESS', data: page});
     }
     catch(err){

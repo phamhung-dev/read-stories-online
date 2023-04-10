@@ -10,6 +10,10 @@ adminView.get("/chapter", (req, res) => {
     res.render("admin/chapter/index");
 });
 
+adminView.get("/page", (req, res) => {
+    res.render("admin/page/index");
+});
+
 
 
 module.exports = adminView;

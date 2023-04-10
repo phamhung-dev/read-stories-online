@@ -21,7 +21,20 @@ async function findBySlug(slug) {
       throw err;
     }
   }
-  
+
+async function findById(id) {
+    try {
+        var author = await Author.findById(id);
+        if (!author) {
+            throw new Error('Author not found');
+        }
+        return author;
+    }
+    catch (err) {
+        throw err;
+    }
+}
+
 async function create(data) {
     allowedProperties = {
         name: true,
@@ -62,4 +75,4 @@ async function update(id, data) {
 }
 
 
-module.exports = { findAll, findBySlug, create, update };
+module.exports = { findAll, findBySlug, create, update, findById };

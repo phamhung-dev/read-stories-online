@@ -4,6 +4,7 @@ const authorController = require("./../../src/controllers/AuthorController");
 
 authorApi.get("/", authorController.findAll);
 authorApi.get("/:slug", authorController.findBySlug);
+authorApi.get("/:id/show", authorController.findById);
 authorApi.post("/create", authorController.create);
 authorApi.put("/:id/update", authorController.update);
 

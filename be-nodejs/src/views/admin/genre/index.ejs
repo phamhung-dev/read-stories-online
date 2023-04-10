@@ -26,7 +26,7 @@
 
           <div class="card mt-3 p-3">
             <div class="card-header py-3">
-              <h5 class="mb-0 text-center"><strong>Chapter</strong></h5>
+              <h5 class="mb-0 text-center"><strong>Genre</strong></h5>
             </div>
 
             <div class="card-body p-3">
@@ -37,9 +37,9 @@
                 <thead class="bg-light">
                   <tr>
                     <th>ID</th>
-                    <th>Picture Book</th>
                     <th>Name</th>
-                    <th>Order Number</th>
+                    <th>Description</th>
+                    <th>Published</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -60,9 +60,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
-                Add new chapter
-              </h5>
+              <h5 class="modal-title" id="exampleModalLabel">Add new genre</h5>
               <button
                 type="button"
                 class="btn-close"
@@ -83,21 +81,25 @@
                 />
               </div>
               <div class="mb-3">
-                <label for="name" class="form-label">Order number</label>
+                <label for="name" class="form-label">Description</label>
                 <input
-                  id="addOrderNumber"
+                  id="addDescription"
                   type="text"
                   class="form-control"
                   aria-describedby="emailHelp"
-                  name="orderNumber"
+                  name="description"
                 />
               </div>
               <div class="dropdown">
+                <label for="name" class="form-label">Published</label>
                 <select
-                  id="pictureBookSelect"
-                  class="form-control mb-4"
-                  name="pictureBook"
-                ></select>
+                  class="form-select"
+                  aria-label="Default select example"
+                  id="addPublished"
+                >
+                  <option value="true">True</option>
+                  <option value="false">False</option>
+                </select>
               </div>
             </div>
             <div class="modal-footer">
@@ -111,7 +113,7 @@
               <button
                 type="button"
                 class="btn btn-primary"
-                onclick="createChapter()"
+                onclick="createGenre()"
               >
                 Save changes
               </button>
@@ -130,7 +132,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Edit chapter</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Edit genre</h5>
               <button
                 type="button"
                 class="btn-close"
@@ -151,21 +153,25 @@
                 />
               </div>
               <div class="mb-3">
-                <label for="name" class="form-label">Order number</label>
+                <label for="name" class="form-label">Description</label>
                 <input
-                  id="editOrderNumber"
+                  id="editDescription"
                   type="text"
                   class="form-control"
                   aria-describedby="emailHelp"
-                  name="orderNumber"
+                  name="description"
                 />
               </div>
               <div class="dropdown">
+                <label for="name" class="form-label">Published</label>
                 <select
-                  id="editPictureBookSelect"
-                  class="form-control mb-4"
-                  name="pictureBook"
-                ></select>
+                  class="form-select"
+                  aria-label="Default select example"
+                  id="editPublished"
+                >
+                  <option value="true">True</option>
+                  <option value="false">False</option>
+                </select>
               </div>
             </div>
             <div class="modal-footer">
@@ -192,34 +198,28 @@
   </body>
   <script>
     $(document).ready(function () {
-      fetch("/api/admin/chapters")
+      fetch("/api/admin/genres")
         .then((response) => response.json())
         .then((response) => {
           $("#chapterTable").DataTable({
             data: response.data,
             columns: [
               { data: "id" },
-              { data: "pictureBook.name" },
               { data: "name" },
-              { data: "orderNumber" },
-            ],
-            columnDefs: [
+              { data: "description" },
+              { data: "published" },
               {
-                targets: 4,
-                data: null,
+                data: "id",
                 render: function (data, type, row) {
-                  return `
-                <button type="button" class="btn btn-primary btn-sm" onclick="getChapterById('${data.id}')" ">Edit</button>
-              `;
+                  return `<button class="btn btn-primary" onclick="getGenreById('${data}')">Edit</button>`;
                 },
               },
             ],
           });
         });
-      load();
     });
-    function getChapterById(id) {
-      fetch(`/api/admin/chapters/${id}/show`, {
+    function getGenreById(id) {
+      fetch(`/api/admin/genres/${id}/show`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -227,14 +227,15 @@
       })
         .then((response) => response.json())
         .then((response) => {
-          if (response.status !== "success") {
+          console.log(response.data.published);
+          if (response.message === "SUCCESS") {
             $("#editId").val(response.data.id);
             $("#editName").val(response.data.name);
-            $("#editOrderNumber").val(response.data.orderNumber);
-            $("#editPictureBookSelect")
-              .val(response.data.pictureBook.id)
-              .change();
+            $("#editDescription").val(response.data.description);
+            $("#editPublished").val(response.data.published.toString()).change();
             $("#editModal").modal("show");
+          } else {
+            alert(response.content);
           }
         });
     }
@@ -242,14 +243,14 @@
     function saveChanges() {
       const id = $("#editId").val();
       const name = $("#editName").val();
-      const orderNumber = $("#editOrderNumber").val();
-      const pictureBook = $("#editPictureBookSelect").val();
+      const description = $("#editDescription").val();
+      const published = $("#editPublished").val();
       const data = {
         name,
-        orderNumber,
-        pictureBook,
+        description,
+        published,
       };
-      fetch(`/api/admin/chapters/${id}/update`, {
+      fetch(`/api/admin/genres/${id}/update`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -267,16 +268,16 @@
         });
     }
 
-    function createChapter() {
+    function createGenre() {
       const name = $("#addName").val();
-      const orderNumber = $("#addOrderNumber").val();
-      const pictureBook = $("#pictureBookSelect").val();
+      const description = $("#addDescription").val();
+      const published = $("#addPublished").val();
       const data = {
         name,
-        orderNumber,
-        pictureBook,
+        description,
+        published,
       };
-      fetch(`/api/admin/chapters/create`, {
+      fetch("/api/admin/genres/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -291,20 +292,6 @@
           } else {
             alert(response.content);
           }
-        });
-    }
-
-    function load() {
-      fetch("/api/admin/picture-books")
-        .then((response) => response.json())
-        .then((response) => {
-          console.log(response);
-          const pictureBooks = response.data.map((pictureBook) => {
-            return `<option value="${pictureBook.id}">${pictureBook.name}</option>`;
-          });
-          document.getElementById("pictureBookSelect").innerHTML = pictureBooks;
-          document.getElementById("editPictureBookSelect").innerHTML =
-            pictureBooks;
         });
     }
   </script>

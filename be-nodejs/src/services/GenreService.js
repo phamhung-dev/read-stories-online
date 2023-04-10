@@ -48,6 +48,7 @@ async function update(id, data){
     allowedProperties = {
         name: true,
         description: true,
+        published: true
     };
     dataClean = cleanProperties(data, allowedProperties);
     try {
@@ -61,6 +62,7 @@ async function update(id, data){
         {
             genre.name = dataClean.name;
             genre.description = dataClean.description;
+            genre.published = dataClean.published;
             await genre.save();
         }else
         if(genreName)

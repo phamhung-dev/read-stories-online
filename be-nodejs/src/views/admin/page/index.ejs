@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/header') %>
+<header>
+  <!-- Sidebar -->
+  <%- include('../partials/sidebar') %>
+  <!-- Sidebar -->
+  <!-- Navbar -->
+  <%- include('../partials/navbar') %>
+  <!-- Navbar -->
+ 
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+</header>
+
+<body>
+  <main style="margin-top: 58px">
+    <div class="container pt-4">
+      <section class="mb-4">
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#addModal">
+            Add
+          </button>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header py-3">
+            <h5 class="mb-0 text-center"><strong>Page</strong></h5>
+          </div>
+
+          <div class="card-body p-0">
+            <table class="table align-middle mb-0 bg-white table-bordered" id="tbPage">
+              
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+
+
+
+<!-- Modal add -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal('addModal')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="dataPage">        
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="file" id="imgPage" class="form-control" />
+            <label class="form-label" for="form3Example3">Image</label>
+          </div>
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="number" id="pageNumber" class="form-control" />
+            <label class="form-label" for="form3Example3">Page number</label>
+          </div>
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="text" id="pageChapter" class="form-control" />
+            <label class="form-label" for="form3Example3">chappter</label>
+          </div>
+           <!-- Email input -->
+           <div class="form-outline">
+            <textarea class="form-control" id="pageContent" rows="4"></textarea>
+            <label class="form-label" for="textAreaExample">Content</label>
+          </div> 
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal('addModal')">Close</button>
+        <button type="button" class="btn btn-primary" id="savePage">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal edit -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal('editModal')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="dataPage">   
+          <div class="dt-center">
+            <img src="" id="e_showImg" class="form-control"  style="width: 100px; height: 100px;"/>
+          </div>
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="file" id="e_imgPage" class="form-control" />
+          </div>
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="number" id="e_pageNumber" class="form-control" />
+            <label class="form-label" for="form3Example3">Page number</label>
+          </div>
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="text" id="e_pageChapter" class="form-control" />
+            <label class="form-label" for="form3Example3">chappter</label>
+          </div>
+           <!-- Email input -->
+           <div class="form-outline">
+            <textarea class="form-control" id="e_pageContent" rows="4"></textarea>
+            <label class="form-label" for="textAreaExample">Content</label>
+          </div> 
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal('addModal')">Close</button>
+        <button type="button" class="btn btn-primary" id="editPage">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal delete -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal('deleteModal')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h1>Are you sure to delete this page?</h1>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal('deleteModal')">Close</button>
+        <button type="button" class="btn btn-error" id="deletePage">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+  </main>
+  <%- include('../partials/footer') %>
+  <script src="https://www.tutorialspoint.com/jquery/jquery-3.6.0.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript">
+
+    //close modal onclick
+    function closeModal(id) {
+      $(`#${id}`).modal('hide');
+    }
+    fetch('http://localhost:3000/api/admin/page',{
+      method : "GET"
+      })
+        .then(response => response.json())
+        .then(res => {
+          console.log(res.data);
+          // Create DataTable
+          $(document).ready(function() {
+            let resData = [];
+            res.data.forEach(element => {
+              var item ={
+                chapter: element.chapter.name,
+                content: element.content,
+                image: element.image,
+                pageNumber: element.pageNumber,
+                createdAt: element.createdAt,
+                updatedAt: element.updatedAt,
+                id : element.id
+              }
+              resData.push(item);
+            });
+            $('#tbPage').DataTable({
+              data:resData,
+              columns: [
+                { title: "Chapter", data: "chapter" },
+                { title: "Content", data: "content" },
+                { title: "Image", data: "image",
+                  render: function (data, type, row) {
+                    return '<img src="' + data + '" width="100px" height="100px" />';
+                  } },
+                { title: "Page Number", data: "pageNumber" },
+                { title: "Created At", data: "createdAt",
+                  render: function (data, type, row) {
+                    var date = new Date(data);
+                    return '<span>' + date.getDate() + '/' + date.getMonth() + "/" + date.getFullYear() + '</span>';
+                  }
+                },
+                { title: "Updated At", data: "updatedAt",
+                  render: function (data, type, row) {
+                      var date = new Date(data);
+                      return '<span>' + date.getDate() + '/' + date.getMonth() + "/" + date.getFullYear() + '</span>';
+                    }
+                 },
+                { title: "Action", data: "id",
+                  render: function (data, type, row) {
+                    return `<button type="button" class="btn btn-primary" onclick="getData('${data}')" data-mdb-toggle="modal" data-mdb-target="#editModal">Edit</button> <button type="button" class="btn btn-danger" data-mdb-toggle="modal" onclick="deletePage('${data}')" data-mdb-target="#deleteModal">Delete</button>`;
+                  } 
+                }
+              ]
+            });
+          });
+        });
+
+    //add data
+    document.getElementById('savePage').addEventListener('click', function(){
+      const data = new FormData();
+      data.append('pageNumber', document.getElementById('pageNumber').value);
+      data.append('content', document.getElementById('pageContent').value);
+      data.append('image', document.getElementById('imgPage').files[0]);
+      data.append('chapter', document.getElementById('pageChapter').value);
+      fetch('http://localhost:3000/api/admin/page/create',{
+      method : "POST",
+      body:  data
+      })
+      .then(response => response.json())
+      .then(res => {
+        if(res.data.message == "ERROR"){
+          alert(res.data.content);
+        }
+        else{
+          alert("Add success");
+          window.location.reload();
+        }
+      });
+    });
+
+    var idPage;
+    function getData(id){
+      idPage = id;
+      fetch(`http://localhost:3000/api/admin/page/${id}/show`,{
+      method : "GET",
+      })
+      .then(response => response.json())
+      .then(res => {
+        if(res.message == "ERROR"){
+          alert(res.data.content);
+        }
+        else{
+          document.getElementById('e_pageNumber').value = res.data.pageNumber;
+          document.getElementById('e_pageContent').value = res.data.content;
+          document.getElementById('e_pageChapter').value = res.data.chapter.id;
+          document.getElementById('e_showImg').src = res.data.image;
+        }
+      });
+    }
+
+    //edit data
+    document.getElementById('editPage').addEventListener('click', function(){
+      const data = new FormData();
+      data.append('pageNumber', document.getElementById('e_pageNumber').value);
+      data.append('content', document.getElementById('e_pageContent').value);
+      if(document.getElementById('e_imgPage').files[0] != undefined){
+        data.append('image', document.getElementById('e_imgPage').files[0]);
+      }
+      data.append('chapter', document.getElementById('e_pageChapter').value);
+      fetch(`http://localhost:3000/api/admin/page/${idPage}/update`,{
+      method : "PUT",
+      body:  data
+      })
+      .then(response => response.json())
+      .then(res => {
+        if(res.message == "ERROR"){
+          alert(res.data.content);
+        }
+        else{
+          alert("Edit success");
+          window.location.reload();
+        }
+      });
+    });
+    
+    var idPageDelete;
+    //delete data
+    function deletePage(id){
+      //check deletePage have click
+      idPageDelete = id;
+    }
+
+    document.getElementById('deletePage').addEventListener('click', function(){
+      fetch(`http://localhost:3000/api/admin/page/${idPageDelete}/destroy`,{
+      method : "DELETE",
+      })
+      .then(response => response.json())
+      .then(res => {
+        console.log(res);
+        if(res.message == "ERROR"){
+          alert(res.data.content);
+        }
+        else{
+          alert("Delete success");
+          window.location.reload();
+        }
+      });
+    });
+  
+  </script>
+</body>
+
+</html>

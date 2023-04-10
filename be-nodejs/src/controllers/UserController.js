@@ -25,7 +25,7 @@ async function register(req, res) {
 
 async function logout(req, res) {
     try {
-        await userService.logout(req.user);
+        await userService.logout(req.user.id);
         res.status(200).json({ message: 'SUCCESS', data: { content: 'Logout successfully' } });
     }
     catch (err) {
@@ -81,7 +81,7 @@ async function findAll(req, res) {
 
 async function showProfile(req, res) {
     try {
-        const user = await userService.showProfile(req.params.id);
+        const user = await userService.showProfile(req.user.id);
         res.status(200).json({ message: 'SUCCESS', data: user });
     }
     catch (err) {
@@ -94,7 +94,7 @@ async function updateProfile(req, res) {
         if (req.file) {
             req.body.avatar = req.file.path;
         }
-        const user = await userService.updateProfile(req.params.id, req.body);
+        const user = await userService.updateProfile(req.user.id, req.body);
         res.status(200).json({ message: 'SUCCESS', data: user });
     }
     catch (err) {
@@ -109,4 +109,4 @@ function index(req, res) {
     res.render('web/index');
 }
 
-module.exports = { login, register, logout, forgotPassword, show, update, findAll, showProfile, updateProfile, showLoginForm };
+module.exports = { login, register, logout, forgotPassword, show, update, findAll, showProfile, updateProfile };

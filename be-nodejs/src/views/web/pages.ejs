@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yae Manga House - Anime Manga or Comic and Game Blog Website Template</title>
+    <link rel="icon" href="/public/img/logo/favicon.ico">
+
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/slicknav.css">
+    <link rel="stylesheet" href="/public/css/acmeticker.css">
+    <link rel="stylesheet" href="/public/css/star-rating.min.css">
+    <link rel="stylesheet" href="/public/css/magnific-popup.css">
+    <link rel="stylesheet" href="/public/css/slick.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+
+<body>
+
+    <div class="wrap">
+        <canvas id="sakura"></canvas>
+    </div>
+
+    <%- include('partials/preloader') %>
+    
+    <%- include('partials/header') %>
+
+    <div class="container">
+        <div class="mb-5">
+            <div class="text-center mb-3">
+                <h3 id="picture-book-title"></h3>
+            </div>
+            <div class="row" id="pages">
+
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <%- include('partials/login') %>
+
+    <script src="/public/js/jquery-3.6.0.min.js"></script>
+
+    <script src="/public/js/bootstrap.min.js"></script>
+    <script src="/public/js/popper.min.js"></script>
+
+    <script src="/public/js/jquery.slicknav.min.js"></script>
+
+    <script src="/public/js/slick.min.js"></script>
+
+    <script src="/public/js/form_validation.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#form").xvalidation({
+                theme: "materialize"
+            });
+            $("#form").submit(function(evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+                if ($("#form").data().xvalidation.methods.validate()) {
+                    swal("Thanks!", "We Will Contact You Soon", "success");
+                }
+                return false;
+            });
+        });
+    </script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js">
+    </script>
+
+    <script src="/public/js/star-rating.min.js"></script>
+
+    <script src="/public/js/fontawsome.js"></script>
+
+    <script src="/public/js/jquery.magnific-popup.js"></script>
+
+    <script src="/public/js/acmeticker.min.js"></script>
+
+    <script src="/public/js/jquery.scrollUp.min.js"></script>
+
+    <script src="/public/js/main.js"></script>
+    <script src="/public/js/rocket-loader.min.js"
+        data-cf-settings="6899e26392dbd83045de8357-|49" defer=""></script>
+    <script>
+        (function() {
+            var js =
+                "window['__CF$cv$params']={r:'7b51b7b9a923493b',m:'H5zf8GoKi9.vXlvNxoVyc2b1BBSQAb8aLQs.lEQZias-1681032483-0-AfOs5vGh4K+EhDCvClXQN+rgW53vNAqVrPTB5tIv/+3un13wLn2TBKeMwba7EutMaaAk3exjUCFQWPfKIdYIhLpTVkMB9FXBkVByComfzsvWY9JP6gzevixF0OQJlx1N2g==',s:[0xe03e24a587,0x210fe112c8],u:'/cdn-cgi/challenge-platform/h/b'};var now=Date.now()/1000,offset=14400,ts=''+(Math.floor(now)-Math.floor(now%offset)),_cpo=document.createElement('script');_cpo.nonce='',_cpo.src='/cdn-cgi/challenge-platform/h/b/scripts/alpha/invisible.js?ts='+ts,document.getElementsByTagName('head')[0].appendChild(_cpo);";
+            var _0xh = document.createElement('iframe');
+            _0xh.height = 1;
+            _0xh.width = 1;
+            _0xh.style.position = 'absolute';
+            _0xh.style.top = 0;
+            _0xh.style.left = 0;
+            _0xh.style.border = 'none';
+            _0xh.style.visibility = 'hidden';
+            document.body.appendChild(_0xh);
+
+            function handler() {
+                var _0xi = _0xh.contentDocument || _0xh.contentWindow.document;
+                if (_0xi) {
+                    var _0xj = _0xi.createElement('script');
+                    _0xj.nonce = '';
+                    _0xj.innerHTML = js;
+                    _0xi.getElementsByTagName('head')[0].appendChild(_0xj);
+                }
+            }
+            if (document.readyState !== 'loading') {
+                handler();
+            } else if (window.addEventListener) {
+                document.addEventListener('DOMContentLoaded', handler);
+            } else {
+                var prev = document.onreadystatechange || function() {};
+                document.onreadystatechange = function(e) {
+                    prev(e);
+                    if (document.readyState !== 'loading') {
+                        document.onreadystatechange = prev;
+                        handler();
+                    }
+                };
+            }
+        })();
+        $(document).ready(function(){
+            var pathname = window.location.pathname;
+            var slugPictureBook = pathname.split("/").at(-2);
+            var slugChapter = pathname.split("/").at(-1);
+            fetch(`/api/picture-books/${slugPictureBook}`)
+            .then(response => response.json())
+            .then(response => {
+                var data = response.data;
+                $('#picture-book-title').text(data.name);
+            });
+            fetch(`/api/picture-books/${slugPictureBook}/${slugChapter}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },            
+                body: JSON.stringify({page: 1}),
+            })
+            .then(response => response.json())
+            .then(response => {
+                var data = response.data;
+                var html = '';
+                for(let i=0; i<data.length; i++){
+                    html += `<div class="col-12 text-center">
+                                <img src="${data[i].image}" alt="">
+                            </div>`;
+                }
+                $('#pages').html(html);
+            });
+        });
+        var pageNumber = 2;
+        async function loadMore(){
+            var pathname = window.location.pathname;
+            var slugPictureBook = pathname.split("/").at(-2);
+            var slugChapter = pathname.split("/").at(-1);
+            await fetch(`/api/picture-books/${slugPictureBook}/${slugChapter}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },            
+                body: JSON.stringify({page: pageNumber}),
+            })
+            .then(response => response.json())
+            .then(response => {
+                var data = response.data;
+                var html = '';
+                for(let i=0; i<data.length; i++){
+                    html += `<div class="col-12 text-center">
+                                <img src="${data[i].image}" alt="">
+                            </div>`;
+                }
+                pageNumber++;
+                $('#pages').append(html);
+            });
+        }
+        window.addEventListener("scroll", async function() {
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+            if (scrollTop + clientHeight >= scrollHeight - 5) {
+                await loadMore();
+            }
+        });
+ </script>
+</body>
+
+</html>

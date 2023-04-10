@@ -33,6 +33,15 @@ async function findByPictureBook(id) {
     }
 }
 
+async function findAllPictureBook() {
+    try {
+        return await PictureBook.find();
+    }
+    catch (err) {
+        throw err;
+    }
+}
+
 async function create(data) {
     allowedProperties = {
         name: true,
@@ -46,6 +55,7 @@ async function create(data) {
     }
     var newChapter = new Chapter(dataClean);
     try {
+        //return pictureBook 
         await newChapter.save();
         return newChapter;
     }
@@ -81,4 +91,4 @@ async function update(id, data) {
 
 
 
-module.exports = { findAll, findById, findByPictureBook, create, update };
+module.exports = { findAll, findById, findByPictureBook, create, update, findAllPictureBook };

@@ -9,6 +9,7 @@ const pageApi = require("./PageApi");
 const purchaseApi = require("./PurchaseApi");
 const favoriteApi = require("./FavoriteApi");
 const roleUserApi = require("./RoleUserApi");
+const roleApi = require("./RoleApi");
 
 adminApi.use("/picture-books", pictureBookApi);
 adminApi.use("/genres", genreApi);
@@ -19,5 +20,6 @@ adminApi.use("/purchases", purchaseApi);
 adminApi.use("/authors", authorApi);
 adminApi.use("/favorites", favoriteApi)
 adminApi.use("/role-users", roleUserApi);
+adminApi.use("/roles", roleApi);
 
 module.exports = adminApi;

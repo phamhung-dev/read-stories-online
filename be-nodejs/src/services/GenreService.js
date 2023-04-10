@@ -76,6 +76,13 @@ async function update(id, data){
     }
 }
 
+async function findAllPublished() {
+    try {
+        return await Genre.find({published: true});
+    }
+    catch (err) {
+        throw err;
+    }
+}
 
-
-module.exports = { findAll, findById, create, update };
+module.exports = { findAll, findById, create, update, findAllPublished };

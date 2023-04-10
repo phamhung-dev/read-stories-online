@@ -14,6 +14,10 @@ adminView.get("/page", (req, res) => {
     res.render("admin/page/index");
 });
 
+adminView.get("/role", (req, res) => {
+    res.render("admin/role/index");
+});
+
 
 
 module.exports = adminView;

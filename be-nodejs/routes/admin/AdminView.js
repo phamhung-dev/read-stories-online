@@ -14,6 +14,9 @@ adminView.get("/page", (req, res) => {
     res.render("admin/page/index");
 });
 
+adminView.get("/genre", (req, res) => {
+    res.render("admin/genre/index");
+});
 adminView.get("/role", (req, res) => {
     res.render("admin/role/index");
 });

@@ -20,13 +20,23 @@ async function findBySlug(req, res) {
     }
 }
 
+async function findById(req, res) {
+    try{
+        const authors = await authorService.findById(req.params.id);
+        res.status(200).json({message: 'SUCCESS', data: authors});
+    }
+    catch(err){
+        res.status(400).json({message: 'ERROR', data: {content: err.message}});
+    }
+}
+
 async function create(req, res) {
     try {
         const authors = await authorService.create(req.body);
         res.status(200).json({message: 'SUCCESS', data: authors});
     }
     catch (err) {
-        res.status(400).json({message: 'ERROR', data: {content: err.message}});
+        res.status(400).json({message: 'ERROR', content: err.message});
     }
 }
 
@@ -40,4 +50,4 @@ async function update(req, res) {
     }
 }
 
-module.exports = { findAll, findBySlug, create, update };
+module.exports = { findAll, findBySlug, create, update, findById };

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/header') %>
+  <header>
+    <!-- Sidebar -->
+    <%- include('../partials/sidebar') %>
+    <!-- Sidebar -->
+    <!-- Navbar -->
+    <%- include('../partials/navbar') %>
+    <!-- Navbar -->
+  </header>
+
+  <body>
+    <main style="margin-top: 58px">
+      <div class="container pt-4">
+        <section class="mb-4">
+          <div class="d-flex justify-content-end">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-mdb-toggle="modal"
+              data-mdb-target="#addModal"
+            >
+              Add
+            </button>
+          </div>
+
+          <div class="card mt-3">
+            <div class="card-header py-3">
+              <h5 class="mb-0 text-center"><strong>Author</strong></h5>
+            </div>
+
+            <div class="card-body p-0">
+              <table
+                id="authorTable"
+                class="table align-middle mb-0 bg-white table-bordered"
+              >
+                <thead class="bg-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- add modal -->
+      <div
+        class="modal fade"
+        id="addModal"
+        tabindex="-1"
+        aria-labelledby="addModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Add new author</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-mdb-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" name="id" id="editId" />
+              <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input
+                  id="addName"
+                  type="text"
+                  class="form-control"
+                  aria-describedby="emailHelp"
+                  name="name"
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-mdb-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="button" class="btn btn-primary" onclick="create()">
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- edit modal -->
+      <div
+        class="modal fade"
+        id="editModal"
+        tabindex="-1"
+        aria-labelledby="editModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Edit author</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-mdb-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" name="id" id="editId" />
+              <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input
+                  id="editName"
+                  type="text"
+                  class="form-control"
+                  aria-describedby="emailHelp"
+                  name="name"
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-mdb-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="saveChanges()"
+              >
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('../partials/footer') %>
+  </body>
+  <script>
+    $(document).ready(function () {
+      fetch("/api/admin/authors", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.message === "SUCCESS") {
+            response.data.forEach((author) => {
+              $("#authorTable tbody").append(`
+                <tr>
+                  <td>${author.id}</td>
+                  <td>${author.name}</td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      onclick="getAuthorById('${author.id}')"
+                    >
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              `);
+            });
+          }
+        });
+    });
+    function getAuthorById(id) {
+      fetch(`/api/admin/authors/${id}/show`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.status !== "success") {
+            $("#editId").val(response.data.id);
+            $("#editName").val(response.data.name);
+            $("#editModal").modal("show");
+          }
+        });
+    }
+    function saveChanges() {
+      const id = $("#editId").val();
+      const name = $("#editName").val();
+      const data = {
+        name,
+      };
+      fetch(`/api/admin/authors/${id}/update`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.message === "SUCCESS") {
+            window.location.reload();
+          } else {
+            alert(response.message);
+          }
+        });
+    }
+    function create() {
+      const name = $("#addName").val();
+      const data = {
+        name,
+      };
+      fetch("/api/admin/authors/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.message === "SUCCESS") {
+            window.location.reload();
+          } else {
+            alert(response.content);
+          }
+        });
+    }
+  </script>
+</html>
